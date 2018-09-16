@@ -269,9 +269,9 @@ public class MainController extends AbstractInitializrController {
 			throws IOException {
 		ProjectRequest request = (ProjectRequest) basicRequest;
 		File dir = this.projectGenerator.generateProjectStructure(request);
-
+		//封装为zip
 		File download = this.projectGenerator.createDistributionFile(dir, ".zip");
-
+		//mvn wrapper or gradle warpper
 		String wrapperScript = getWrapperScript(request);
 		new File(dir, wrapperScript).setExecutable(true);
 		Zip zip = new Zip();

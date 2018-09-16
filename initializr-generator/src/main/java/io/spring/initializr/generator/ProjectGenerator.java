@@ -251,7 +251,7 @@ public class ProjectGenerator {
 		String extension = ("kotlin".equals(language) ? "kt" : language);
 		write(new File(src, applicationName + "." + extension),
 				"Application." + extension, model);
-
+		//生成war时.需要额外的类
 		if ("war".equals(request.getPackaging())) {
 			String fileName = "ServletInitializer." + extension;
 			write(new File(src, fileName), fileName, model);
@@ -371,6 +371,7 @@ public class ProjectGenerator {
 		final boolean kotlinSupport = VERSION_2_0_0_M6.compareTo(bootVersion) <= 0;
 		model.put("kotlinSupport", kotlinSupport);
 
+		//maven.pom的属性
 		if (isMavenBuild(request)) {
 			model.put("mavenBuild", true);
 			ParentPom parentPom = metadata.getConfiguration().getEnv().getMaven()
@@ -386,18 +387,20 @@ public class ProjectGenerator {
 			model.put("mavenParentVersion", parentPom.getVersion());
 			model.put("includeSpringBootBom", parentPom.isIncludeSpringBootBom());
 		}
-
+        //pom文件的respository属性
 		model.put("repositoryValues", request.getRepositories().entrySet());
 		if (!request.getRepositories().isEmpty()) {
 			model.put("hasRepositories", true);
 		}
 
+		//BillOfMaterials=bom
 		List<Map<String, String>> resolvedBoms = buildResolvedBoms(request);
 		model.put("resolvedBoms", resolvedBoms);
 		ArrayList<Map<String, String>> reversedBoms = new ArrayList<>(resolvedBoms);
 		Collections.reverse(reversedBoms);
 		model.put("reversedBoms", reversedBoms);
 
+		//dependencies按scope区分
 		model.put("compileDependencies",
 				filterDependencies(dependencies, Dependency.SCOPE_COMPILE));
 		model.put("runtimeDependencies",
@@ -410,7 +413,7 @@ public class ProjectGenerator {
 				filterDependencies(dependencies, Dependency.SCOPE_PROVIDED));
 		model.put("testDependencies",
 				filterDependencies(dependencies, Dependency.SCOPE_TEST));
-
+        //bom里解析version放入BuildProperties
 		request.getBoms().forEach((k, v) -> {
 			if (v.getVersionProperty() != null) {
 				request.getBuildProperties().getVersions()
@@ -442,6 +445,7 @@ public class ProjectGenerator {
 			model.put("groovy", true);
 		}
 
+		//model里添加import和annotations
 		model.put("isRelease", request.getBootVersion().contains("RELEASE"));
 		setupApplicationModel(request, model);
 
@@ -467,7 +471,7 @@ public class ProjectGenerator {
 		// Java versions
 		model.put("java8OrLater", isJava8OrLater(request));
 
-		// Append the project request to the model
+		// Append the project request to the model.包装到bean里逐个添加
 		BeanWrapperImpl bean = new BeanWrapperImpl(request);
 		for (PropertyDescriptor descriptor : bean.getPropertyDescriptors()) {
 			if (bean.isReadableProperty(descriptor.getName())) {
