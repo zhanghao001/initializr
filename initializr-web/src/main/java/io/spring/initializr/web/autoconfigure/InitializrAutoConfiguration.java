@@ -24,6 +24,7 @@ import javax.cache.expiry.CreatedExpiryPolicy;
 import javax.cache.expiry.Duration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.spring.initializr.extend.AppPropertiesCreate;
 import io.spring.initializr.generator.ProjectGenerator;
 import io.spring.initializr.generator.ProjectRequestPostProcessor;
 import io.spring.initializr.generator.ProjectRequestResolver;
@@ -83,6 +84,12 @@ public class InitializrAutoConfiguration {
 	@ConditionalOnMissingBean
 	public ProjectGenerator projectGenerator() {
 		return new ProjectGenerator();
+	}
+
+	@Bean
+	@ConditionalOnMissingBean
+	public AppPropertiesCreate appPropertiesCreate() {
+		return new AppPropertiesCreate();
 	}
 
 	@Bean

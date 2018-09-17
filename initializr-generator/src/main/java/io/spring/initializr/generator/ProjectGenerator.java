@@ -96,6 +96,9 @@ public class ProjectGenerator {
 	private TemplateRenderer templateRenderer = new TemplateRenderer();
 
 	@Autowired
+	private AppPropertiesCreate appPropertiesCreate = new AppPropertiesCreate();
+
+	@Autowired
 	private ProjectResourceLocator projectResourceLocator = new ProjectResourceLocator();
 
 	@Value("${TMPDIR:.}/initializr")
@@ -245,6 +248,10 @@ public class ProjectGenerator {
 		String applicationName = request.getApplicationName();
 		String language = request.getLanguage();
 
+        //进行扩展,要在Application.java生成前.模板渲染时使用扩展生成的注解
+        this.appPropertiesCreate.createJavaFile(request, model, dir, language);
+
+        //源代码
 		String codeLocation = language;
 		File src = new File(new File(dir, "src/main/" + codeLocation),
 				request.getPackageName().replace(".", "/"));
@@ -252,12 +259,13 @@ public class ProjectGenerator {
 		String extension = ("kotlin".equals(language) ? "kt" : language);
 		write(new File(src, applicationName + "." + extension),
 				"Application." + extension, model);
-		//生成war时.需要额外的类
+		// 生成war时.需要额外的类
 		if ("war".equals(request.getPackaging())) {
 			String fileName = "ServletInitializer." + extension;
 			write(new File(src, fileName), fileName, model);
 		}
 
+        //test代码
 		File test = new File(new File(dir, "src/test/" + codeLocation),
 				request.getPackageName().replace(".", "/"));
 		test.mkdirs();
@@ -265,10 +273,13 @@ public class ProjectGenerator {
 		write(new File(test, applicationName + "Tests." + extension),
 				"ApplicationTests." + extension, model);
 
+		//resource包
 		File resources = new File(dir, "src/main/resources");
 		resources.mkdirs();
-		//todo 生成的application.properties需要改动
-		writeText(new File(resources, "application.properties"), AppPropertiesCreate.createContent(model, request));
+		//生成的application.properties需要改动
+		writeText(new File(resources, "application.properties"),
+				this.appPropertiesCreate.createAppropContent(request, model));
+
 
 		if (request.hasWebFacet()) {
 			new File(dir, "src/main/resources/templates").mkdirs();
@@ -373,7 +384,7 @@ public class ProjectGenerator {
 		final boolean kotlinSupport = VERSION_2_0_0_M6.compareTo(bootVersion) <= 0;
 		model.put("kotlinSupport", kotlinSupport);
 
-		//maven.pom的属性
+		// maven.pom的属性
 		if (isMavenBuild(request)) {
 			model.put("mavenBuild", true);
 			ParentPom parentPom = metadata.getConfiguration().getEnv().getMaven()
@@ -389,20 +400,20 @@ public class ProjectGenerator {
 			model.put("mavenParentVersion", parentPom.getVersion());
 			model.put("includeSpringBootBom", parentPom.isIncludeSpringBootBom());
 		}
-        //pom文件的respository属性
+		// pom文件的respository属性
 		model.put("repositoryValues", request.getRepositories().entrySet());
 		if (!request.getRepositories().isEmpty()) {
 			model.put("hasRepositories", true);
 		}
 
-		//BillOfMaterials=bom
+		// BillOfMaterials=bom
 		List<Map<String, String>> resolvedBoms = buildResolvedBoms(request);
 		model.put("resolvedBoms", resolvedBoms);
 		ArrayList<Map<String, String>> reversedBoms = new ArrayList<>(resolvedBoms);
 		Collections.reverse(reversedBoms);
 		model.put("reversedBoms", reversedBoms);
 
-		//dependencies按scope区分
+		// dependencies按scope区分
 		model.put("compileDependencies",
 				filterDependencies(dependencies, Dependency.SCOPE_COMPILE));
 		model.put("runtimeDependencies",
@@ -415,7 +426,7 @@ public class ProjectGenerator {
 				filterDependencies(dependencies, Dependency.SCOPE_PROVIDED));
 		model.put("testDependencies",
 				filterDependencies(dependencies, Dependency.SCOPE_TEST));
-        //bom里解析version放入BuildProperties
+		// bom里解析version放入BuildProperties
 		request.getBoms().forEach((k, v) -> {
 			if (v.getVersionProperty() != null) {
 				request.getBuildProperties().getVersions()
@@ -447,7 +458,7 @@ public class ProjectGenerator {
 			model.put("groovy", true);
 		}
 
-		//model里添加import和annotations
+		// model里添加import和annotations
 		model.put("isRelease", request.getBootVersion().contains("RELEASE"));
 		setupApplicationModel(request, model);
 
@@ -742,7 +753,7 @@ public class ProjectGenerator {
 
 	}
 
-	private static class Imports {
+	public static class Imports {
 
 		private final List<String> statements = new ArrayList<>();
 
@@ -750,7 +761,7 @@ public class ProjectGenerator {
 
 		private boolean finalCarriageReturn;
 
-		Imports(String language) {
+		public Imports(String language) {
 			this.language = language;
 		}
 
@@ -781,7 +792,7 @@ public class ProjectGenerator {
 
 	}
 
-	private static class Annotations {
+    public static class Annotations {
 
 		private final List<String> statements = new ArrayList<>();
 

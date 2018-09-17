@@ -3,7 +3,7 @@ package {{packageName}};
 import org.springframework.boot.SpringApplication;
 {{applicationImports}}
 
-{{applicationAnnotations}}
+{{&applicationAnnotations}}
 public class {{applicationName}} {
 
 	public static void main(String[] args) {
