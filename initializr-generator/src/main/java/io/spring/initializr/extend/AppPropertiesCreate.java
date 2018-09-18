@@ -54,7 +54,7 @@ public class AppPropertiesCreate {
         test.mkdirs();
 
         //DO
-        new Unit().mkdir(src, "entity").writeFile("UserEntity.java", "mybatis/entity.java", model);
+        new Unit().mkdir(src, "model").writeFile("UserDO.java", "mybatis/do.java", model);
         //Mapper.xml Mapper.java
         new Unit().mkdir(src, "dao").writeFile("UserDAO.java", "mybatis/dao.java", model);
         new Unit().mkdir(resource, "mybatis/mapper").writeFile("UserDAOMapper.xml", "mybatis/mapper.xml", model);
@@ -72,6 +72,7 @@ public class AppPropertiesCreate {
         model.put("applicationImports", new StringBuilder(model.get("applicationImports").toString()).append("\n" + imports.toString()));
         model.put("applicationAnnotations", new StringBuilder(model.get("applicationAnnotations").toString()).append("\n" + annotations.toString()));
         //test
+        new Unit().mkdir(test, "dao").writeFile("UserDAOTest.java", "mybatis/test.java", model);
 
     }
 

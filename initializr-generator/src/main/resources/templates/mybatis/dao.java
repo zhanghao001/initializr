@@ -1,19 +1,21 @@
-package com.neo.mapper;
+package {{packageName}}.dao;
 
 import java.util.List;
 
-import com.neo.entity.UserEntity;
+import {{packageName}}.model.UserDO;
 
-public interface UserMapper {
+/**
+ * @author chengxu
+ */
+public interface UserDAO {
 	
-	List<UserEntity> getAll();
-	
-	UserEntity getOne(Long id);
+	List<UserDO> getAll();
 
-	void insert(UserEntity user);
+	UserDO getOne(Long id);
 
-	void update(UserEntity user);
+	long insert(UserDO user);
 
-	void delete(Long id);
+    long update(UserDO user);
 
+    long delete(Long id);
 }
