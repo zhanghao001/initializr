@@ -187,7 +187,6 @@ initializr:
         url: https://oss.sonatype.org/content/repositories/snapshots/
         snapshotsEnabled: true
   dependencies:
-
     #web模块
     - name: Spring
       content:
@@ -238,7 +237,7 @@ initializr:
       - name: Hessian
         id: hessian
         description: Create your own Aspects using Spring AOP and AspectJ
-      # 数据库
+    # 数据库
     - name: 数据库
       content:
       - name: MySql
@@ -272,7 +271,7 @@ initializr:
           version: 1.3.2
       - name: JDBC
         id: jdbc
-        description: JDBC databases
+        description: JDBC databases, support transaction. It is included when use mybtais.
         links:
         - rel: guide
           href: https://spring.io/guides/gs/relational-data-access/
@@ -284,16 +283,14 @@ initializr:
           href: http://docs.spring.io/spring-boot/docs/{bootVersion}/reference/htmlsingle/#boot-features-sql
       - name: tk-Mapper
         id: tkMapper
-        description: tk mapper
+        description: tk mapper.可以极其方便的使用MyBatis单表的增删改查。
         links:
         - rel: guide
-          href: https://spring.io/guides/gs/relational-data-access/
-          description: Accessing Relational Data using JDBC with Spring
-        - rel: guide
-          href: https://spring.io/guides/gs/managing-transactions/
-          description: Managing Transactions
+          href: https://github.com/abel533/Mapper
+          description: 官方github
         - rel: reference
-          href: http://docs.spring.io/spring-boot/docs/{bootVersion}/reference/htmlsingle/#boot-features-sql
+          href: https://github.com/abel533/Mapper/wiki
+          description: 用户手册
     - name: NoSQL
       content:
         - name: Redis

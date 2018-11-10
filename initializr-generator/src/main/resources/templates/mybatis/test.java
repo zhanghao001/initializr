@@ -1,4 +1,4 @@
-package {{packageName}};
+package {{packageName}}.dao;
 
 import java.util.List;
 import java.util.Random;

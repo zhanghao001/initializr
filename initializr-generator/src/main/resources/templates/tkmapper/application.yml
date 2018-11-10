@@ -1,0 +1,2 @@
+#tk的基础mapper.附带很多的dao方法
+mapper.mappers=tk.mybatis.mapper.common.Mapper
