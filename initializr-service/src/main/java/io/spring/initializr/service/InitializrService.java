@@ -25,6 +25,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurerSupport;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -38,6 +39,7 @@ import org.springframework.web.servlet.resource.ResourceUrlProvider;
  */
 @SpringBootApplication
 @EnableCaching
+@ComponentScan("io.spring.initializr.extend")
 public class InitializrService {
 
 	public static void main(String[] args) {

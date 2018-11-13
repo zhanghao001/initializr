@@ -253,7 +253,7 @@ initializr:
           description: Accessing data with MySQL
       - name: MyBatis
         id: mybatis
-        description: Persistence support using MyBatis
+        description: Persistence support using MyBatis. It is include JDBC.
         links:
         - rel: guide
           href: https://github.com/mybatis/spring-boot-starter/wiki/Quick-Start
@@ -284,6 +284,9 @@ initializr:
       - name: tk-Mapper
         id: tkMapper
         description: tk mapper.可以极其方便的使用MyBatis单表的增删改查。
+        groupId: tk.mybatis
+        artifactId: mapper-spring-boot-starter
+        version: 2.0.4
         links:
         - rel: guide
           href: https://github.com/abel533/Mapper

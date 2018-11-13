@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import io.spring.initializr.InitializrException;
-import io.spring.initializr.extend.AppPropertiesCreate;
+import io.spring.initializr.extend.ExtendContentCreator;
 import io.spring.initializr.metadata.BillOfMaterials;
 import io.spring.initializr.metadata.Dependency;
 import io.spring.initializr.metadata.InitializrConfiguration.Env.Maven.ParentPom;
@@ -96,7 +96,7 @@ public class ProjectGenerator {
 	private TemplateRenderer templateRenderer = new TemplateRenderer();
 
 	@Autowired
-	private AppPropertiesCreate appPropertiesCreate = new AppPropertiesCreate();
+	private ExtendContentCreator extendContentCreator = new ExtendContentCreator();
 
 	@Autowired
 	private ProjectResourceLocator projectResourceLocator = new ProjectResourceLocator();
@@ -249,7 +249,7 @@ public class ProjectGenerator {
 		String language = request.getLanguage();
 
         //进行扩展,要在Application.java生成前.模板渲染时使用扩展生成的注解
-        this.appPropertiesCreate.createJavaFile(request, model, dir, language);
+        this.extendContentCreator.createJavaFile(request, model, dir, language);
 
         //源代码
 		String codeLocation = language;
@@ -278,7 +278,7 @@ public class ProjectGenerator {
 		resources.mkdirs();
 		//生成的application.properties需要改动
 		writeText(new File(resources, "application.properties"),
-				this.appPropertiesCreate.createAppropContent(request, model));
+				this.extendContentCreator.createAppProperties(request, model));
 
 
 		if (request.hasWebFacet()) {

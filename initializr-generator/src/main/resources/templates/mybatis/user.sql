@@ -9,13 +9,18 @@ Target Server Version : 50505
 File Encoding         : 65001
 Date: 2016-11-05 21:17:33
 */
+DROP DATABASE IF EXISTS demo;
+
+CREATE DATABASE `demo` CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+use demo;
 
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
 -- Table structure for `users`
 -- ----------------------------
-DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS users;
 CREATE TABLE `users` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `user_name` varchar(32) DEFAULT NULL COMMENT '用户名',
