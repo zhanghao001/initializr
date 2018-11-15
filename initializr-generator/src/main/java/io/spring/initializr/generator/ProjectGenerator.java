@@ -33,11 +33,9 @@ import java.util.stream.Collectors;
 
 import io.spring.initializr.InitializrException;
 import io.spring.initializr.extend.ExtendContentCreator;
-import io.spring.initializr.metadata.BillOfMaterials;
-import io.spring.initializr.metadata.Dependency;
+import io.spring.initializr.extend.ModuleExtend;
+import io.spring.initializr.metadata.*;
 import io.spring.initializr.metadata.InitializrConfiguration.Env.Maven.ParentPom;
-import io.spring.initializr.metadata.InitializrMetadata;
-import io.spring.initializr.metadata.InitializrMetadataProvider;
 import io.spring.initializr.util.TemplateRenderer;
 import io.spring.initializr.util.Version;
 import io.spring.initializr.util.VersionProperty;
@@ -249,7 +247,7 @@ public class ProjectGenerator {
 		String language = request.getLanguage();
 
         //进行扩展,要在Application.java生成前.模板渲染时使用扩展生成的注解
-        this.extendContentCreator.createJavaFile(request, model, dir, language);
+		this.extendContentCreator.createJavaFile(request, model, dir, language);
 
         //源代码
 		String codeLocation = language;
@@ -363,6 +361,7 @@ public class ProjectGenerator {
 	 */
 	protected Map<String, Object> resolveModel(ProjectRequest originalRequest) {
 		Assert.notNull(originalRequest.getBootVersion(), "boot version must not be null");
+
 		Map<String, Object> model = new LinkedHashMap<>();
 		InitializrMetadata metadata = this.metadataProvider.get();
 
@@ -414,7 +413,9 @@ public class ProjectGenerator {
 		model.put("reversedBoms", reversedBoms);
 
 		// dependencies按scope区分
-		model.put("compileDependencies",
+        List<ModuleExtend> realModule = this.extendContentCreator.getRealModule(request);
+        model.put("realModule", realModule);
+        model.put("compileDependencies",
 				filterDependencies(dependencies, Dependency.SCOPE_COMPILE));
 		model.put("runtimeDependencies",
 				filterDependencies(dependencies, Dependency.SCOPE_RUNTIME));

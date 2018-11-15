@@ -1,27 +1,22 @@
 package {{packageName}}.dao;
 
-import java.util.List;
-import java.util.Random;
-
-import {{packageName}}.dao.UserDAO;
+import {{packageName}}.{{applicationName}}Tests;
 import {{packageName}}.model.UserDO;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Random;
 
 /**
  * @author chengxu
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
 @Transactional
 @Rollback
-public class UserDAOTest {
+public class UserDAOTest extends {{applicationName}}Tests {
 
     @Autowired
     private UserDAO userDAO;

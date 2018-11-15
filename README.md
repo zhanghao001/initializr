@@ -5,6 +5,6 @@
 ### 数据库   MySQL,MyBatis,JDBC,tk-Mapper
 * tk-Mapper为自定义增加的.其他的是原生自带的.
 * Mybatis和tk附带了样例代码
-* 同时附带了tk和mybatis时,使用tk,忽略mybatis.
+* 同时附带了tk和mybatis时,使用tk,忽略mybatis.tk已经自动引入了mybatis-starter的所有内容了
 ### part2
 * redis MongoDB ES
